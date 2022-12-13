@@ -1,50 +1,21 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-interface Post {
-  body: string;
-  id: number;
-  title: string;
-  userId: number;
-}
+import { Link, Route, Routes } from "react-router-dom";
+import { Book } from "./pages/book";
+import { Home } from "./pages/home";
+import { Post } from "./pages/post";
 
 function App() {
-  const url = "https://jsonplaceholder.typicode.com/posts";
-  const [post, setPost] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  async function fetchPosts() {
-    try {
-      const response = await axios.get(`${url}`);
-      console.log(response.data);
-      setPost(response.data);
-    } catch (error: any) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
   return (
     <div className="App">
-      <h1>Hello World</h1>
-      {loading && <h1>loading...</h1>}
-      {error && <h1>error</h1>}
-      {post.map(({ id, title, body, userId }: Post) => {
-        return (
-          <>
-            <li key={id}>
-              <h1>{title}</h1>
-              <h2>{body}</h2>
-            </li>
-            ;
-          </>
-        );
-      })}
+      <nav>
+        <Link to={"/"}>Home</Link>
+        <Link to={"/books"}>Book</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/books" element={<Book />}></Route>
+        <Route path="/post/:id" element={<Post />}></Route>
+      </Routes>
     </div>
   );
 }
